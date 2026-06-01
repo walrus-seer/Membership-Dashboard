@@ -1,4 +1,4 @@
-﻿
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -118,7 +118,7 @@
   <div class="wlr-layout">
     <div class="wlr-form-panel">
       <div class="wlr-panel-label">Member Details</div>
-      <div id="tier-badge" class="wlr-tier-badge badge-gold"><span>â—†</span><span id="tier-text">Gold Member</span></div>
+      <div id="tier-badge" class="wlr-tier-badge badge-gold"><span>&#9670;</span><span id="tier-text">Gold Member</span></div>
 
       <div class="wlr-field">
         <label>Member Name</label>
@@ -135,9 +135,9 @@
       <div class="wlr-field">
         <label>Membership Duration</label>
         <select id="f-type" onchange="handleDuration()">
-          <option value="1year">1 Year â€“ Gold</option>
-          <option value="3month">3 Months â€“ Silver</option>
-          <option value="1month">1 Month â€“ Bronze</option>
+          <option value="1year">1 Year - Gold</option>
+          <option value="3month">3 Months - Silver</option>
+          <option value="1month">1 Month - Bronze</option>
         </select>
       </div>
       <div class="wlr-row">
@@ -151,7 +151,7 @@
         </div>
       </div>
 
-      <button class="wlr-btn wlr-btn-gold" onclick="updateCard()">âœ¦ Preview Card</button>
+      <button class="wlr-btn wlr-btn-gold" onclick="updateCard()">Preview Card</button>
       <button class="wlr-btn wlr-btn-dl" onclick="downloadCard()">&#8595; Download as PNG</button>
       <div id="dl-status"></div>
     </div>
@@ -181,9 +181,9 @@
                 </div>
                 <div class="card-meta card-meta-right">
                   <div class="card-meta-lbl">Joined</div>
-                  <div class="card-meta-val" id="c-join">â€”</div>
+                  <div class="card-meta-val" id="c-join">--</div>
                   <div class="card-meta-lbl" style="margin-top:6px;">Valid Until</div>
-                  <div class="card-meta-val" id="c-exp">â€”</div>
+                  <div class="card-meta-val" id="c-exp">--</div>
                 </div>
               </div>
             </div>
@@ -194,11 +194,11 @@
       <div class="wlr-details">
         <div class="wlr-detail-row">
           <span class="wlr-detail-lbl">Member</span>
-          <span class="wlr-detail-val" id="d-name">â€”</span>
+          <span class="wlr-detail-val" id="d-name">--</span>
         </div>
         <div class="wlr-detail-row">
           <span class="wlr-detail-lbl">ID</span>
-          <span class="wlr-detail-val" id="d-id">â€”</span>
+          <span class="wlr-detail-val" id="d-id">--</span>
         </div>
         <div class="wlr-detail-row">
           <span class="wlr-detail-lbl">Tier</span>
@@ -223,7 +223,7 @@ const tiers = {
 };
 
 function fmt(d) {
-  if (!d) return 'â€”';
+  if (!d) return '--';
   const [y,m,day] = d.split('-');
   const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return day+' '+mo[+m-1]+' '+y;
@@ -435,3 +435,4 @@ document.getElementById('f-join').value = new Date().toISOString().split('T')[0]
 handleDuration();
 updateCard();
 </script>
+
