@@ -1,0 +1,437 @@
+﻿
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  .wlr-root { font-family: 'Inter', sans-serif; background: #f5f0e8; min-height: 100vh; padding: 2rem; box-sizing: border-box; color: #1a1208; }
+  .wlr-header { text-align: center; margin-bottom: 2rem; }
+  .wlr-brand { font-family: 'Playfair Display', serif; font-size: 11px; letter-spacing: 7px; text-transform: uppercase; color: #b8a070; margin-bottom: 4px; }
+  .wlr-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #1a1208; letter-spacing: 3px; text-transform: uppercase; }
+  .wlr-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); margin: 10px auto; }
+  .wlr-subtitle { font-size: 10px; letter-spacing: 4px; color: #b8a070; text-transform: uppercase; margin-top: 4px; }
+
+  .wlr-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+
+  .wlr-form-panel { background: #fff; border: 0.5px solid #e8dfc8; border-radius: 20px; padding: 1.75rem; box-shadow: 0 8px 40px rgba(180,150,80,0.1); }
+  .wlr-panel-label { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: #c9a84c; margin-bottom: 1.25rem; font-weight: 600; }
+  .wlr-field { margin-bottom: 1rem; }
+  .wlr-field label { display: block; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #a89060; margin-bottom: 6px; font-weight: 500; }
+  .wlr-field input, .wlr-field select { width: 100%; background: #faf7f2; border: 0.5px solid #e0d4b8; border-radius: 10px; padding: 10px 14px; color: #2a1e08; font-size: 13px; font-family: 'Inter', sans-serif; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+  .wlr-field input:focus, .wlr-field select:focus { border-color: #c9a84c; }
+  .wlr-field input::placeholder { color: #c8bca0; }
+  .wlr-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .wlr-tier-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px; font-size: 10px; letter-spacing: 2px; font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; }
+  .badge-bronze { background: #f5ede0; border: 0.5px solid #cd7f32; color: #8a4f10; }
+  .badge-silver { background: #f0f0f5; border: 0.5px solid #9090aa; color: #3a3a5a; }
+  .badge-gold { background: #fdf6e0; border: 0.5px solid #c9a84c; color: #7a5c10; }
+
+  .wlr-btn { width: 100%; padding: 12px; border: none; border-radius: 12px; font-size: 11px; font-family: 'Inter', sans-serif; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-weight: 600; margin-top: 6px; transition: opacity 0.2s, transform 0.1s; }
+  .wlr-btn:active { transform: scale(0.98); }
+  .wlr-btn-gold { background: linear-gradient(135deg, #a07820, #c9a84c, #f0d080, #c9a84c, #a07820); color: #1a1208; }
+  .wlr-btn-dl { background: #fff; border: 0.5px solid #d4c498; color: #8a6e30; font-size: 11px; padding: 10px; margin-top: 8px; }
+  .wlr-btn-dl:hover { background: #fdf6e0; }
+
+  .wlr-preview-panel { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+  .wlr-preview-label { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: #b8a070; }
+
+  .wlr-card-wrap { perspective: 1200px; cursor: pointer; }
+  .wlr-card { width: 360px; height: 220px; border-radius: 20px; position: relative; overflow: hidden; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+  .wlr-card-wrap:hover .wlr-card { transform: rotateY(-8deg) rotateX(4deg) scale(1.03); }
+
+  .card-gold { background: linear-gradient(135deg, #1a1206 0%, #2d2008 20%, #1a1206 40%, #3a2c0a 60%, #1e1608 80%, #0f0b04 100%); box-shadow: 0 30px 70px rgba(150,100,20,0.35), 0 0 0 0.5px rgba(201,168,76,0.3); }
+  .card-silver { background: linear-gradient(135deg, #1a1a22 0%, #28283a 20%, #1c1c28 40%, #303048 60%, #1e1e30 80%, #121220 100%); box-shadow: 0 30px 70px rgba(80,80,120,0.35), 0 0 0 0.5px rgba(160,160,200,0.25); }
+  .card-bronze { background: linear-gradient(135deg, #1a0e06 0%, #2e1808 20%, #1e1008 40%, #3a1e0a 60%, #221208 80%, #140a04 100%); box-shadow: 0 30px 70px rgba(150,80,20,0.35), 0 0 0 0.5px rgba(180,100,50,0.3); }
+
+  .card-gold .card-shimmer { background: linear-gradient(105deg, transparent 30%, rgba(201,168,76,0.3) 45%, rgba(240,208,128,0.5) 50%, rgba(201,168,76,0.3) 55%, transparent 70%); }
+  .card-silver .card-shimmer { background: linear-gradient(105deg, transparent 30%, rgba(180,180,220,0.25) 45%, rgba(210,210,240,0.4) 50%, rgba(180,180,220,0.25) 55%, transparent 70%); }
+  .card-bronze .card-shimmer { background: linear-gradient(105deg, transparent 30%, rgba(180,100,50,0.25) 45%, rgba(210,140,80,0.4) 50%, rgba(180,100,50,0.25) 55%, transparent 70%); }
+
+  .card-gold .card-tier { color: #f0d080; border-color: rgba(201,168,76,0.5); background: rgba(201,168,76,0.1); }
+  .card-silver .card-tier { color: #c8c8e8; border-color: rgba(180,180,220,0.4); background: rgba(180,180,220,0.08); }
+  .card-bronze .card-tier { color: #e8a060; border-color: rgba(180,100,50,0.5); background: rgba(180,100,50,0.1); }
+
+  .card-gold .card-name { color: #f0d080; }
+  .card-silver .card-name { color: #d8d8f0; }
+  .card-bronze .card-name { color: #e8a060; }
+
+  .card-gold .card-meta-val { color: #d4b060; }
+  .card-silver .card-meta-val { color: #b0b0d0; }
+  .card-bronze .card-meta-val { color: #c88040; }
+
+  .card-gold .card-line { background: linear-gradient(90deg, transparent, rgba(201,168,76,0.6), transparent); }
+  .card-silver .card-line { background: linear-gradient(90deg, transparent, rgba(160,160,210,0.5), transparent); }
+  .card-bronze .card-line { background: linear-gradient(90deg, transparent, rgba(180,100,50,0.6), transparent); }
+
+  .card-gold .card-logo-text { color: #f0d080; }
+  .card-silver .card-logo-text { color: #d0d0f0; }
+  .card-bronze .card-logo-text { color: #e8a060; }
+
+  .card-gold .card-tagline { color: rgba(201,168,76,0.55); }
+  .card-silver .card-tagline { color: rgba(180,180,220,0.45); }
+  .card-bronze .card-tagline { color: rgba(180,100,50,0.5); }
+
+  .card-gold .card-meta-lbl { color: rgba(201,168,76,0.5); }
+  .card-silver .card-meta-lbl { color: rgba(160,160,210,0.5); }
+  .card-bronze .card-meta-lbl { color: rgba(180,100,50,0.45); }
+
+  .card-shimmer { position: absolute; inset: 0; animation: shine 4s ease-in-out infinite; }
+  @keyframes shine { 0%, 100% { opacity: 0; transform: translateX(-100%); } 40%, 60% { opacity: 1; } 50% { transform: translateX(100%); } }
+  .card-texture { position: absolute; inset: 0; opacity: 0.04; background-image: repeating-linear-gradient(45deg, #fff 0px, #fff 1px, transparent 1px, transparent 8px); }
+
+  .card-content { position: absolute; inset: 0; padding: 22px 26px; display: flex; flex-direction: column; justify-content: space-between; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .card-logo-wrap { display: flex; align-items: center; min-height: 42px; }
+  .card-logo-img { width: 116px; max-height: 42px; object-fit: contain; display: block; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.25)); }
+  .card-logo-text { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+  .card-tagline { font-size: 7px; letter-spacing: 3px; text-transform: uppercase; margin-top: 2px; }
+  .card-tier { font-size: 8px; letter-spacing: 2.5px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid; font-weight: 600; text-transform: uppercase; }
+  .card-name { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 600; letter-spacing: 0.5px; }
+  .card-line { height: 0.5px; margin: 8px 0; }
+  .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .card-meta-lbl { font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 2px; }
+  .card-meta-val { font-size: 11px; font-weight: 500; letter-spacing: 0.5px; }
+  .card-meta-right { text-align: right; }
+
+  .wlr-details { background: #fff; border: 0.5px solid #e8dfc8; border-radius: 14px; padding: 1rem 1.25rem; width: 360px; box-sizing: border-box; box-shadow: 0 4px 20px rgba(180,150,80,0.08); }
+  .wlr-detail-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid #f0e8d0; }
+  .wlr-detail-row:last-child { border-bottom: none; }
+  .wlr-detail-lbl { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: #b8a070; font-weight: 500; }
+  .wlr-detail-val { font-size: 12px; color: #4a3820; letter-spacing: 0.5px; }
+
+  #dl-status { font-size: 11px; color: #8a6e30; text-align: center; margin-top: 6px; min-height: 16px; }
+
+  @media (max-width: 680px) {
+    .wlr-layout { grid-template-columns: 1fr; }
+    .wlr-card, .wlr-details { width: 100%; max-width: 360px; }
+    .wlr-card { height: 185px; }
+  }
+</style>
+
+<div class="wlr-root">
+  <div class="wlr-header">
+    <div class="wlr-brand">Walrus</div>
+    <div class="wlr-title">Yes India Can</div>
+    <div class="wlr-divider"></div>
+    <div class="wlr-subtitle">Premium Membership</div>
+  </div>
+
+  <div class="wlr-layout">
+    <div class="wlr-form-panel">
+      <div class="wlr-panel-label">Member Details</div>
+      <div id="tier-badge" class="wlr-tier-badge badge-gold"><span>â—†</span><span id="tier-text">Gold Member</span></div>
+
+      <div class="wlr-field">
+        <label>Member Name</label>
+        <input type="text" id="f-name" placeholder="Full Name" oninput="updateCard()">
+      </div>
+      <div class="wlr-field">
+        <label>Member ID</label>
+        <input type="text" id="f-id" placeholder="WRS-000001" oninput="updateCard()">
+      </div>
+      <div class="wlr-field">
+        <label>Contact Number</label>
+        <input type="text" id="f-phone" placeholder="+91 98765 43210" oninput="updateCard()">
+      </div>
+      <div class="wlr-field">
+        <label>Membership Duration</label>
+        <select id="f-type" onchange="handleDuration()">
+          <option value="1year">1 Year â€“ Gold</option>
+          <option value="3month">3 Months â€“ Silver</option>
+          <option value="1month">1 Month â€“ Bronze</option>
+        </select>
+      </div>
+      <div class="wlr-row">
+        <div class="wlr-field">
+          <label>Join Date</label>
+          <input type="date" id="f-join" oninput="updateCard()">
+        </div>
+        <div class="wlr-field">
+          <label>Expiry Date</label>
+          <input type="date" id="f-exp" oninput="updateCard()">
+        </div>
+      </div>
+
+      <button class="wlr-btn wlr-btn-gold" onclick="updateCard()">âœ¦ Preview Card</button>
+      <button class="wlr-btn wlr-btn-dl" onclick="downloadCard()">&#8595; Download as PNG</button>
+      <div id="dl-status"></div>
+    </div>
+
+    <div class="wlr-preview-panel">
+      <div class="wlr-preview-label">Live Preview</div>
+      <div class="wlr-card-wrap">
+        <div class="wlr-card card-gold" id="the-card">
+          <div class="card-texture"></div>
+          <div class="card-shimmer"></div>
+          <div class="card-content">
+            <div class="card-top">
+              <div class="card-logo-wrap">
+                <img src="https://i.postimg.cc/44vthxVz/Logo.png" alt="Walrus Logo" class="card-logo-img" id="card-logo-img" crossorigin="anonymous">
+              </div>
+              <div class="card-tier" id="c-tier">Gold Member</div>
+            </div>
+            <div>
+              <div class="card-name" id="c-name">Your Name</div>
+              <div class="card-line"></div>
+              <div class="card-bottom">
+                <div class="card-meta">
+                  <div class="card-meta-lbl">Member ID</div>
+                  <div class="card-meta-val" id="c-id">WRS-000001</div>
+                  <div class="card-meta-lbl" style="margin-top:6px;">Contact</div>
+                  <div class="card-meta-val" id="c-phone">+91 98765 43210</div>
+                </div>
+                <div class="card-meta card-meta-right">
+                  <div class="card-meta-lbl">Joined</div>
+                  <div class="card-meta-val" id="c-join">â€”</div>
+                  <div class="card-meta-lbl" style="margin-top:6px;">Valid Until</div>
+                  <div class="card-meta-val" id="c-exp">â€”</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wlr-details">
+        <div class="wlr-detail-row">
+          <span class="wlr-detail-lbl">Member</span>
+          <span class="wlr-detail-val" id="d-name">â€”</span>
+        </div>
+        <div class="wlr-detail-row">
+          <span class="wlr-detail-lbl">ID</span>
+          <span class="wlr-detail-val" id="d-id">â€”</span>
+        </div>
+        <div class="wlr-detail-row">
+          <span class="wlr-detail-lbl">Tier</span>
+          <span class="wlr-detail-val" id="d-tier">Gold</span>
+        </div>
+        <div class="wlr-detail-row">
+          <span class="wlr-detail-lbl">Status</span>
+          <span class="wlr-detail-val" id="d-status" style="color:#2a7a4a;">Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const LOGO_URL = 'https://i.postimg.cc/44vthxVz/Logo.png';
+
+const tiers = {
+  '1year':  { cls:'card-gold',   badge:'badge-gold',   label:'Gold Member',   tier:'Gold'   },
+  '3month': { cls:'card-silver', badge:'badge-silver', label:'Silver Member', tier:'Silver' },
+  '1month': { cls:'card-bronze', badge:'badge-bronze', label:'Bronze Member', tier:'Bronze' }
+};
+
+function fmt(d) {
+  if (!d) return 'â€”';
+  const [y,m,day] = d.split('-');
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return day+' '+mo[+m-1]+' '+y;
+}
+
+function handleDuration() {
+  const val = document.getElementById('f-type').value;
+  const join = document.getElementById('f-join').value;
+  if (join) {
+    const d = new Date(join);
+    if (val==='1year') d.setFullYear(d.getFullYear()+1);
+    else if (val==='3month') d.setMonth(d.getMonth()+3);
+    else d.setMonth(d.getMonth()+1);
+    document.getElementById('f-exp').value = d.toISOString().split('T')[0];
+  }
+  updateCard();
+}
+
+function updateCard() {
+  const name  = document.getElementById('f-name').value  || 'Your Name';
+  const id    = document.getElementById('f-id').value    || 'WRS-000001';
+  const phone = document.getElementById('f-phone').value || '+91 98765 43210';
+  const type  = document.getElementById('f-type').value;
+  const join  = document.getElementById('f-join').value;
+  const exp   = document.getElementById('f-exp').value;
+  const t = tiers[type];
+  const card = document.getElementById('the-card');
+  card.className = 'wlr-card '+t.cls;
+  document.getElementById('c-name').textContent  = name;
+  document.getElementById('c-id').textContent    = id;
+  document.getElementById('c-phone').textContent = phone;
+  document.getElementById('c-tier').textContent  = t.label;
+  document.getElementById('c-join').textContent  = fmt(join);
+  document.getElementById('c-exp').textContent   = fmt(exp);
+  const badge = document.getElementById('tier-badge');
+  badge.className = 'wlr-tier-badge '+t.badge;
+  document.getElementById('tier-text').textContent = t.label;
+  document.getElementById('d-name').textContent  = name;
+  document.getElementById('d-id').textContent    = id;
+  document.getElementById('d-tier').textContent  = t.tier;
+  const expired = exp && new Date(exp) < new Date();
+  document.getElementById('d-status').textContent  = expired ? 'Expired' : 'Active';
+  document.getElementById('d-status').style.color  = expired ? '#a03030' : '#2a7a4a';
+}
+
+function downloadCard() {
+  const name = (document.getElementById('f-name').value || 'member').replace(/\s+/g,'_');
+  const status = document.getElementById('dl-status');
+  status.textContent = 'Preparing card...';
+
+  const W = 1080, H = 660;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const type  = document.getElementById('f-type').value;
+  const mName = document.getElementById('f-name').value  || 'Your Name';
+  const mId   = document.getElementById('f-id').value    || 'WRS-000001';
+  const mPh   = document.getElementById('f-phone').value || '+91 98765 43210';
+  const mJoin = document.getElementById('c-join').textContent;
+  const mExp  = document.getElementById('c-exp').textContent;
+  const tier  = tiers[type];
+
+  const colors = {
+    'card-gold':   { bg1:'#1a1206', bg2:'#2d2008', bg3:'#3a2c0a', acc:'#c9a84c', acc2:'#f0d080', glow:'rgba(201,168,76,0.15)' },
+    'card-silver': { bg1:'#1a1a22', bg2:'#28283a', bg3:'#303048', acc:'#9090aa', acc2:'#d0d0e8', glow:'rgba(160,160,200,0.12)' },
+    'card-bronze': { bg1:'#1a0e06', bg2:'#2e1808', bg3:'#3a1e0a', acc:'#cd7f32', acc2:'#e8a060', glow:'rgba(180,100,50,0.14)' }
+  };
+  const c = colors[tier.cls];
+
+  function roundedRectPath(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+    ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+    ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+    ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+    ctx.closePath();
+  }
+
+  function drawCard(logoImg) {
+    roundedRectPath(0, 0, W, H, 48);
+    ctx.save(); ctx.clip();
+
+    const bg = ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,   c.bg1);
+    bg.addColorStop(0.35,c.bg2);
+    bg.addColorStop(0.65,c.bg3);
+    bg.addColorStop(1,   c.bg1);
+    ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+    ctx.globalAlpha = 0.045;
+    for (let i=-H; i<W+H; i+=22) {
+      ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i+H,H);
+      ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+
+    const shine = ctx.createLinearGradient(0,0,W,H*0.5);
+    shine.addColorStop(0,   'transparent');
+    shine.addColorStop(0.45,c.glow);
+    shine.addColorStop(0.5, c.acc2+'33');
+    shine.addColorStop(0.55,c.glow);
+    shine.addColorStop(1,   'transparent');
+    ctx.fillStyle = shine; ctx.fillRect(0,0,W,H);
+
+    if (logoImg) {
+      ctx.drawImage(logoImg, 72, 52, 230, 95);
+    } else {
+      ctx.font = 'bold 52px "Playfair Display", serif';
+      ctx.fillStyle = c.acc2; ctx.textAlign = 'left';
+      ctx.fillText('WALRUS', 72, 108);
+    }
+
+    const tierLabel = tier.label.toUpperCase();
+    ctx.font = '600 22px Inter, sans-serif';
+    const tw = ctx.measureText(tierLabel).width + 48;
+    const tx = W - tw - 64;
+    roundedRectPath(tx, 64, tw, 46, 23);
+    ctx.strokeStyle = c.acc+'88'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = c.acc+'18'; ctx.fill();
+    ctx.fillStyle = c.acc2; ctx.textAlign = 'center';
+    ctx.fillText(tierLabel, tx + tw/2, 94);
+
+    ctx.font = '600 72px "Playfair Display", serif';
+    ctx.fillStyle = c.acc2; ctx.textAlign = 'left';
+    ctx.fillText(mName, 72, 360);
+
+    const lg = ctx.createLinearGradient(64,0,W-64,0);
+    lg.addColorStop(0,'transparent'); lg.addColorStop(0.5,c.acc+'cc'); lg.addColorStop(1,'transparent');
+    ctx.strokeStyle = lg; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(64,390); ctx.lineTo(W-64,390); ctx.stroke();
+
+    ctx.font = '500 20px Inter, sans-serif';
+    ctx.fillStyle = c.acc+'66'; ctx.textAlign = 'left';
+    ctx.fillText('MEMBER ID', 72, 450);
+    ctx.font = '500 28px Inter, sans-serif';
+    ctx.fillStyle = c.acc; ctx.fillText(mId, 72, 490);
+
+    ctx.font = '500 20px Inter, sans-serif';
+    ctx.fillStyle = c.acc+'66'; ctx.fillText('CONTACT', 72, 548);
+    ctx.font = '500 28px Inter, sans-serif';
+    ctx.fillStyle = c.acc; ctx.fillText(mPh, 72, 588);
+
+    ctx.font = '500 20px Inter, sans-serif';
+    ctx.fillStyle = c.acc+'66'; ctx.textAlign = 'right';
+    ctx.fillText('JOINED', W-72, 450);
+    ctx.font = '500 28px Inter, sans-serif';
+    ctx.fillStyle = c.acc; ctx.fillText(mJoin, W-72, 490);
+    ctx.font = '500 20px Inter, sans-serif';
+    ctx.fillStyle = c.acc+'66'; ctx.fillText('VALID UNTIL', W-72, 548);
+    ctx.font = '500 28px Inter, sans-serif';
+    ctx.fillStyle = c.acc; ctx.fillText(mExp, W-72, 588);
+
+    ctx.restore();
+
+    canvas.toBlob(blob => {
+      if (!blob) { status.textContent = 'Download failed. Try again.'; return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'walrus-card-'+name+'.png';
+      document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
+      status.textContent = 'Downloaded successfully!';
+      setTimeout(() => status.textContent = '', 3000);
+    }, 'image/png');
+  }
+
+  if (LOGO_URL) {
+    const logo = new Image();
+    logo.crossOrigin = 'anonymous';
+    logo.onload = () => drawCard(logo);
+    logo.onerror = () => drawCard(null);
+    logo.src = LOGO_URL;
+  } else {
+    drawCard(null);
+  }
+}
+
+function updateCard() {
+  const name  = document.getElementById('f-name').value  || 'Your Name';
+  const id    = document.getElementById('f-id').value    || 'WRS-000001';
+  const phone = document.getElementById('f-phone').value || '+91 98765 43210';
+  const type  = document.getElementById('f-type').value;
+  const join  = document.getElementById('f-join').value;
+  const exp   = document.getElementById('f-exp').value;
+  const t = tiers[type];
+  const card = document.getElementById('the-card');
+  card.className = 'wlr-card '+t.cls;
+  document.getElementById('c-name').textContent  = name;
+  document.getElementById('c-id').textContent    = id;
+  document.getElementById('c-phone').textContent = phone;
+  document.getElementById('c-tier').textContent  = t.label;
+  document.getElementById('c-join').textContent  = fmt(join);
+  document.getElementById('c-exp').textContent   = fmt(exp);
+  const badge = document.getElementById('tier-badge');
+  badge.className = 'wlr-tier-badge '+t.badge;
+  document.getElementById('tier-text').textContent = t.label;
+  document.getElementById('d-name').textContent  = name;
+  document.getElementById('d-id').textContent    = id;
+  document.getElementById('d-tier').textContent  = t.tier;
+  const expired = exp && new Date(exp) < new Date();
+  document.getElementById('d-status').textContent  = expired ? 'Expired' : 'Active';
+  document.getElementById('d-status').style.color  = expired ? '#a03030' : '#2a7a4a';
+}
+
+
+document.getElementById('card-logo-img').src = LOGO_URL;
+document.getElementById('f-join').value = new Date().toISOString().split('T')[0];
+handleDuration();
+updateCard();
+</script>
