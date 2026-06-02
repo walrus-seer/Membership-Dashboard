@@ -92,8 +92,10 @@
     letter-spacing: 0.5px;
     overflow-wrap: anywhere;
     word-break: break-word;
-    text-align: justify;
+    text-align: left;
     white-space: normal;
+    line-height: 1.25;
+    max-width: 260px;
   }
   .card-line { height: 0.5px; margin: 8px 0; }
   .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
@@ -312,6 +314,46 @@ function downloadCard() {
     ctx.closePath();
   }
 
+  function getCanvasTextLines(text, maxWidth) {
+    const words = text.split(/\s+/).filter(Boolean);
+    const lines = [];
+    let line = '';
+
+    function pushLongWord(word) {
+      let part = '';
+      for (const char of word) {
+        const test = part + char;
+        if (ctx.measureText(test).width > maxWidth && part) {
+          lines.push(part);
+          part = char;
+        } else {
+          part = test;
+        }
+      }
+      line = part;
+    }
+
+    for (const word of words) {
+      const test = line ? line + ' ' + word : word;
+      if (ctx.measureText(test).width <= maxWidth) {
+        line = test;
+      } else {
+        if (line) lines.push(line);
+        if (ctx.measureText(word).width > maxWidth) pushLongWord(word);
+        else line = word;
+      }
+    }
+
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  function wrapCanvasText(text, x, y, maxWidth, lineHeight) {
+    const lines = getCanvasTextLines(text, maxWidth);
+    lines.forEach((textLine, index) => ctx.fillText(textLine, x, y + index * lineHeight));
+    return lines.length;
+  }
+
   function drawCard(logoImg) {
     roundedRectPath(0, 0, W, H, 48);
     ctx.save(); ctx.clip();
@@ -356,14 +398,22 @@ function downloadCard() {
     ctx.fillStyle = c.acc2; ctx.textAlign = 'center';
     ctx.fillText(tierLabel, tx + tw/2, 94);
 
-    ctx.font = '600 72px "Playfair Display", serif';
+    let nameSize = 72;
+    ctx.font = '600 '+nameSize+'px "Playfair Display", serif';
+    while (getCanvasTextLines(mName, 760).length > 2 && nameSize > 48) {
+      nameSize -= 4;
+      ctx.font = '600 '+nameSize+'px "Playfair Display", serif';
+    }
     ctx.fillStyle = c.acc2; ctx.textAlign = 'left';
-    ctx.fillText(mName, 72, 360);
+    const nameLineHeight = nameSize <= 56 ? 58 : 66;
+    const nameY = nameSize <= 56 ? 292 : 300;
+    const nameLines = wrapCanvasText(mName, 72, nameY, 760, nameLineHeight);
+    const lineY = Math.min(426, Math.max(390, nameY + nameLines * nameLineHeight + 18));
 
     const lg = ctx.createLinearGradient(64,0,W-64,0);
     lg.addColorStop(0,'transparent'); lg.addColorStop(0.5,c.acc+'cc'); lg.addColorStop(1,'transparent');
     ctx.strokeStyle = lg; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(64,390); ctx.lineTo(W-64,390); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(64,lineY); ctx.lineTo(W-64,lineY); ctx.stroke();
 
     ctx.font = '500 20px Inter, sans-serif';
     ctx.fillStyle = c.acc+'66'; ctx.textAlign = 'left';
